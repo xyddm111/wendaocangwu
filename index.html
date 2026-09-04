@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d1117">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="问道苍梧">
+<title>问道苍梧 · 修仙模拟器</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ======== 开始界面 ======== -->
+  <section id="screen-start" class="screen">
+    <div class="title-wrap">
+      <div class="title-deco">☯</div>
+      <h1 class="game-title">问 道 苍 梧</h1>
+      <p class="game-sub">一镜一世界 · 一念一仙途</p>
+      <p class="game-desc">苍梧界，万载封印将破。<br>
+      你从尘埃中觉醒，退婚之辱、灭门之仇、身世之谜、天地大劫——<br>
+      打脸逆袭、儿女情长、兄弟恩仇，皆由你一念之间。</p>
+    </div>
+    <div class="start-btns">
+      <button id="btn-new" class="btn btn-primary">开始新游戏</button>
+      <button id="btn-continue" class="btn">继续上次</button>
+      <button id="btn-load" class="btn">读取存档</button>
+      <button id="btn-import" class="btn">导入存档码</button>
+    </div>
+    <p id="start-hint" class="hint"></p>
+    <p class="foot-note">网页单机版 · 存档在浏览器本地 · 支持导出/导入跨设备续玩</p>
+  </section>
+
+  <!-- ======== 创建角色 ======== -->
+  <section id="screen-create" class="screen hidden">
+    <h2 class="panel-title">—— 塑造你的仙途 ——</h2>
+    <div class="create-block">
+      <label class="c-label">道号（姓名）</label>
+      <input id="inp-name" type="text" maxlength="8" value="沈青玄">
+    </div>
+    <div class="create-block">
+      <label class="c-label">出身 <span class="c-tip">（决定开局剧本与初始家底）</span></label>
+      <div id="origin-cards" class="card-grid"></div>
+    </div>
+    <div class="create-block">
+      <label class="c-label">灵根 <button id="btn-root-rand" class="mini-btn" type="button">随机</button></label>
+      <div id="root-options" class="chip-row"></div>
+    </div>
+    <div class="create-block">
+      <label class="c-label">体质 <button id="btn-body-rand" class="mini-btn" type="button">随机</button></label>
+      <div id="body-options" class="chip-row"></div>
+    </div>
+    <div class="create-block">
+      <label class="c-label">性格起始 <span class="c-tip">（剩余点数 <b id="temper-left">6</b>，三轴共 6 点）</span></label>
+      <div id="temper-row" class="temper-row"></div>
+    </div>
+    <button id="btn-start" class="btn btn-primary btn-big">踏入苍梧</button>
+  </section>
+
+  <!-- ======== 游戏主界面 ======== -->
+  <section id="screen-game" class="screen hidden">
+    <header id="topbar">
+      <div class="topbar-left"><span class="tb-loc" id="tb-loc">—</span></div>
+      <div class="topbar-right">
+        <button class="tb-btn" data-panel="status"><svg class="tb-ico" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tb-label">状态</span></button>
+        <button class="tb-btn" data-panel="inventory"><svg class="tb-ico" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 9.4 7.55 4.24"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg><span class="tb-label">背包</span></button>
+        <button class="tb-btn" data-panel="relations"><svg class="tb-ico" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="tb-label">关系</span></button>
+        <button class="tb-btn" data-panel="map"><svg class="tb-ico" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg><span class="tb-label">地图</span></button>
+        <button class="tb-btn" data-panel="bestiary"><svg class="tb-ico" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span class="tb-label">图鉴</span></button>
+        <button class="tb-btn" data-panel="skills"><svg class="tb-ico" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span class="tb-label">功法</span></button>
+        <button class="tb-btn" data-panel="save"><svg class="tb-ico" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg><span class="tb-label">存档</span></button>
+        <button class="tb-btn" data-panel="settings"><svg class="tb-ico" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg><span class="tb-label">设置</span></button>
+      </div>
+    </header>
+
+    <main id="story-area">
+      <div id="scene-meta">
+        <span id="scene-chapter" class="chapter-label"></span>
+        <span id="scene-location" class="loc-label"></span>
+      </div>
+      <h2 id="scene-title"></h2>
+      <div id="scene-text"></div>
+      <div id="choices"></div>
+      <div id="typing-caret" class="caret hidden">▌</div>
+    </main>
+
+    <footer id="status-bar">
+      <span id="sb-realm"></span>
+      <span id="sb-lingshi"></span>
+      <span id="sb-temper"></span>
+      <span id="sb-save" class="sb-save"></span>
+    </footer>
+
+    <!-- 面板容器（内容由 JS 渲染） -->
+    <div id="panel-status" class="panel hidden" data-name="status"></div>
+    <div id="panel-inventory" class="panel hidden" data-name="inventory"></div>
+    <div id="panel-relations" class="panel hidden" data-name="relations"></div>
+    <div id="panel-map" class="panel hidden" data-name="map"></div>
+    <div id="panel-bestiary" class="panel hidden" data-name="bestiary"></div>
+    <div id="panel-skills" class="panel hidden" data-name="skills"></div>
+    <div id="panel-save" class="panel hidden" data-name="save"></div>
+    <div id="panel-settings" class="panel hidden" data-name="settings"></div>
+    <div id="panel-backdrop" class="panel-backdrop hidden"></div>
+
+    <!-- 战斗面板 -->
+    <div id="combat-panel" class="combat-panel hidden">
+      <div class="combat-inner">
+        <div class="combat-head">
+          <span id="cb-title">—</span>
+          <button id="cb-close" class="mini-btn">收起</button>
+        </div>
+        <div id="cb-enemy" class="cb-enemy"></div>
+        <div id="cb-player" class="cb-player"></div>
+        <div id="cb-log" class="cb-log"></div>
+        <div id="cb-options" class="cb-options"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 通用弹层 -->
+  <div id="modal" class="modal hidden"><div id="modal-body"></div></div>
+  <!-- 通知浮层 -->
+  <div id="toasts"></div>
+
+</div>
+
+<!-- 数据（先加载） -->
+<script src="data/items.js"></script>
+<script src="data/danfang.js"></script>
+<script src="data/skills.js"></script>
+<script src="data/beasts.js"></script>
+<script src="data/characters.js"></script>
+<script src="data/avatars.js"></script>
+<script src="data/map.js"></script>
+<script src="data/vol1.js"></script>
+<script src="data/vol2x.js"></script>
+<script src="data/lore.js"></script>
+<script src="data/endings.js"></script>
+<!-- 引擎（后加载） -->
+<script src="js/engine.js"></script>
+<script src="js/save.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/map.js"></script>
+<script src="js/combat.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+<script>
+// 注册离线缓存（仅 http/https 下生效；打开过一次后断网也能玩）
+if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  });
+}
+</script>
+</body>
+</html>
